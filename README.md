@@ -35,7 +35,7 @@ public function registerBundles()
 
 That's it. You're good. Get some well deserved rest.
 
-## Usage:
+Usage:
 ---------
 
 Given a `Rocket` entity with two attributes: `name` (a string) and `colors` (an array of strings).
