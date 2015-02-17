@@ -91,7 +91,7 @@ class RocketController extends Controller
 }
 ```
 
-The Controlle and Form above now accepts the following JSON POST request:
+The Controller and Form above now accept the following JSON POST request:
 
 ```http
 POST /rockets HTTP/1.1
