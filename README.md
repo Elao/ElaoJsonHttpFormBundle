@@ -1,5 +1,7 @@
 Elao JSON HTTP Form Bundle
-=====================
+==========================
+
+[![Build Status](https://travis-ci.org/Elao/ElaoJsonHttpFormBundle.svg)](https://travis-ci.org/Elao/ElaoJsonHttpFormBundle)
 
 Adds support of JSON POST requests for Forms:
 
