@@ -14,13 +14,13 @@ Installation:
 
 Add _ElaoJsonHttpFormBundle_ to your composer.json:
 
-```
+```bash
 $ php composer.phar require elao/json-http-form-bundle
 ```
 
 Register the bundle in the kernel:
 
-```
+```php
 <?php
 // app/AppKernel.php
 
@@ -42,7 +42,7 @@ Given a `Rocket` entity with two attributes: `name` (a string) and `colors` (an 
 
 The following form and controller are meant to create a new instance of Rocket:
 
-```
+```php
 <?php
 
 // ...
@@ -71,7 +71,7 @@ class RocketType extends AbstractType
 }
 ```
 
-```
+```php
 <?php
 
 // ...
@@ -93,7 +93,7 @@ class RocketController extends Controller
 
 The Controlle and Form above now accepts the following JSON POST request:
 
-```
+```http
 POST /rockets HTTP/1.1
 Accept: application/json
 Content-Type: application/json
