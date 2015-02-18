@@ -1,8 +1,8 @@
 {
     "name": "elao/json-http-form-bundle",
     "type": "symfony-bundle",
-    "description": "Adds support of JSON POST requests for Forms",
-    "keywords": ["json", "post", "api", "rest", "form"],
+    "description": "Adds support of JSON requests for Forms",
+    "keywords": ["json", "api", "rest", "form"],
     "homepage": "https://github.com/Elao/ElaoJsonHttpFormBundle.git",
     "license": "MIT",
     "authors": [

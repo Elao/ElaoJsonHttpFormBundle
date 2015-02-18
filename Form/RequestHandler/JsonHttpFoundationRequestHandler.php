@@ -23,6 +23,13 @@ class JsonHttpFoundationRequestHandler extends HttpFoundationRequestHandler
     private $serverParams;
 
     /**
+     * Methods that have a body
+     *
+     * @var array
+     */
+    private static $bodyMethods = ['POST', 'PUT', 'PATCH', 'DELETE'];
+
+    /**
      * {@inheritdoc}
      */
     public function __construct(ServerParams $serverParams = null)
@@ -41,7 +48,7 @@ class JsonHttpFoundationRequestHandler extends HttpFoundationRequestHandler
             throw new UnexpectedTypeException($request, 'Symfony\Component\HttpFoundation\Request');
         }
 
-        if ($request->getMethod() === 'POST' && $request->getContentType() === 'json') {
+        if ($request->getContentType() === 'json' && in_array($request->getMethod(), static::$bodyMethods)) {
             return $this->handleJsonRequest($form, $request);
         } else {
             return parent::handleRequest($form, $request);

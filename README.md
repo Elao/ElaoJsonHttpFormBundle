@@ -3,9 +3,9 @@ Elao JSON HTTP Form Bundle
 
 [![Build Status](https://travis-ci.org/Elao/ElaoJsonHttpFormBundle.svg)](https://travis-ci.org/Elao/ElaoJsonHttpFormBundle)
 
-Adds support of JSON POST requests for Forms:
+Adds support of JSON requests for Forms:
 
-Symfony forms will be able to handle both JSON POST requests and standard GET/POST requests (as they are by default).
+Symfony forms will be able to handle both JSON POST/PUT/PATCH/DELETE requests and standard GET/POST requests (as they are by default).
 
 The `JsonHttpFoundationRequestHandler` handle the request: If the request content-type is JSON, it decodes the JSON request content as an array and submit the form with this data.
 
@@ -87,7 +87,7 @@ class RocketController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             // The $rocket object is now correctly hydrated with the data from the form.
-            // Weither the request is a classic GET/POST request or a JSON POST one.
+            // Weither the request is a classic GET/POST request or a JSON one.
         }
     }
 }
