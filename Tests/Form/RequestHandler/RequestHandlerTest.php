@@ -32,7 +32,7 @@ class RequestHandlerTest extends \PHPUnit_Framework_TestCase
         $request = new Request([], [], [], [], [], [
             'REQUEST_METHOD'    => 'POST',
             'HTTP_CONTENT_TYPE' => 'application/json',
-        ], json_encode($data));
+        ], json_encode(['rocket' => $data]));
 
         $this->requestHandler->handleRequest($form, $request);
         $this->assertEquals($data, $form->getData());
