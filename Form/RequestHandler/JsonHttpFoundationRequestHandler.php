@@ -64,7 +64,8 @@ class JsonHttpFoundationRequestHandler extends HttpFoundationRequestHandler
     protected function handleJsonRequest(FormInterface $form, Request $request)
     {
         if ($this->isContentSizeValid($form)) {
-            $data = json_decode($request->getContent(), true);
+            $name    = $form->getName();
+            $content = json_decode($request->getContent(), true);
 
             if (json_last_error() !== JSON_ERROR_NONE) {
                 $form->submit(null, false);
@@ -74,6 +75,17 @@ class JsonHttpFoundationRequestHandler extends HttpFoundationRequestHandler
                 )));
 
                 return;
+            }
+
+            if ('' === $name) {
+                $data = $content;
+            } else {
+                // Don't submit if the form's name does not exist in the request
+                if (!isset($content[$name])) {
+                    return;
+                }
+
+                $data = $content[$name];
             }
 
             $form->submit($data, 'PATCH' !== $request->getMethod());
