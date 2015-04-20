@@ -7,7 +7,7 @@ Adds support of JSON requests for Forms:
 
 Symfony forms will be able to handle both JSON POST/PUT/PATCH/DELETE requests and standard GET/POST requests (as they are by default).
 
-The `JsonHttpFoundationRequestHandler` handle the request: If the request content-type is JSON, it decodes the JSON request content as an array and submit the form with this data.
+The `JsonHttpFoundationRequestHandler` handles the request: If the request content-type is JSON, it decodes the JSON request content as an array and submits the form with its data.
 
 Otherwise, it lets the default behaviour operate: the `HttpFoundationRequestHandler` will handle the request. So all your non-json form request will be treated just the way they've always been.
 
@@ -65,7 +65,7 @@ class RocketType extends AbstractType
                     'blue'   => 'Blue',
                     'brown'  => 'Brown',
                 ]
-            )
+            ])
         ;
     }
 
@@ -87,7 +87,7 @@ class RocketController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             // The $rocket object is now correctly hydrated with the data from the form.
-            // Weither the request is a classic GET/POST request or a JSON one.
+            // Whether the request is a classic GET/POST request or a JSON one.
         }
     }
 }
