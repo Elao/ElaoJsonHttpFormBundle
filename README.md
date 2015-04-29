@@ -104,4 +104,16 @@ Content-Length: 43
 {"name":"Melies","colors":["pink","brown"]}
 ```
 
+License
+-------
+
+MIT
+
+
+Author Information
+------------------
+
+http://www.elao.com/
+
+
 \o/
