@@ -77,7 +77,7 @@ class JsonHttpFoundationRequestHandler extends HttpFoundationRequestHandler
                 return;
             }
 
-            if ('' === $name) {
+            if ('' === $name || $request->getMethod() === 'DELETE') {
                 $data = $content;
             } else {
                 // Don't submit if the form's name does not exist in the request
