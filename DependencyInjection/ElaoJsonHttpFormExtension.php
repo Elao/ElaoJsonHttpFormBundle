@@ -21,6 +21,10 @@ class ElaoJsonHttpFormExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('forms.xml');
+
+        $container->setParameter(
+            'form.type_extension.form.request_handler.class',
+            'Elao\Bundle\JsonHttpFormBundle\Form\RequestHandler\JsonHttpFoundationRequestHandler'
+        );
     }
 }
