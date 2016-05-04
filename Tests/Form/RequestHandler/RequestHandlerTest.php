@@ -6,6 +6,9 @@ use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\Forms;
 use Symfony\Component\HttpFoundation\Request;
 use Elao\Bundle\JsonHttpFormBundle\Form\RequestHandler\JsonHttpFoundationRequestHandler;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class RequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -60,7 +63,7 @@ class RequestHandlerTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'name'   => "Méliès",
-            'colors' => ['pink', 'brown']
+            'colors' => ['brown', 'pink']
         ];
     }
 
@@ -72,17 +75,17 @@ class RequestHandlerTest extends \PHPUnit_Framework_TestCase
     private function getSampleForm()
     {
         return $this->factory
-            ->createNamed('rocket', 'form', [], [])
-            ->add('name', 'text')
-            ->add('colors', 'choice', [
+            ->createNamed('rocket', FormType::class, [], [])
+            ->add('name', TextType::class)
+            ->add('colors', ChoiceType::class, [
                 'multiple' => true,
                 'choices'  => [
-                    'white'  => 'White',
-                    'orange' => 'Orange',
-                    'blonde' => 'Blonde',
-                    'pink'   => 'Pink',
-                    'blue'   => 'Blue',
-                    'brown'  => 'Brown',
+                    'White'  => 'white',
+                    'Orange' => 'orange',
+                    'Blonde' => 'blonde',
+                    'Pink'   => 'pink',
+                    'Blue'   => 'blue',
+                    'Brown'  => 'brown',
                 ]
             ]);
     }
