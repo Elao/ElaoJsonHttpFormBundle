@@ -1,4 +1,4 @@
-Elao JSON HTTP Form Bundle
+Elao JSON HTTP Form Bundle ![](https://img.shields.io/badge/Symfony-2.5-blue.svg)
 ==========================
 
 [![Build Status](https://travis-ci.org/Elao/ElaoJsonHttpFormBundle.svg)](https://travis-ci.org/Elao/ElaoJsonHttpFormBundle)
