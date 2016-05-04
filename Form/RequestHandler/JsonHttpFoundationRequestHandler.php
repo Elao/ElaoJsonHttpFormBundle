@@ -104,7 +104,10 @@ class JsonHttpFoundationRequestHandler extends HttpFoundationRequestHandler
      */
     protected function isContentSizeValid(FormInterface $form)
     {
-        $contentLength    = $this->serverParams->getContentLength();
+        // Mark the form with an error if the uploaded size was too large
+        // This is done here and not in FormValidator because $_POST is
+        // empty when that error occurs. Hence the form is never submitted.
+        $contentLength = $this->serverParams->getContentLength();
         $maxContentLength = $this->serverParams->getPostMaxSize();
 
         if (!empty($maxContentLength) && $contentLength > $maxContentLength) {

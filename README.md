@@ -1,4 +1,4 @@
-Elao JSON HTTP Form Bundle
+Elao JSON HTTP Form Bundle ![](https://img.shields.io/badge/Symfony-3.0-blue.svg)
 ==========================
 
 [![Build Status](https://travis-ci.org/Elao/ElaoJsonHttpFormBundle.svg)](https://travis-ci.org/Elao/ElaoJsonHttpFormBundle)
@@ -47,6 +47,12 @@ The following form and controller are meant to create a new instance of Rocket:
 ```php
 <?php
 
+namespace AppBundle\Form\Type;
+
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+
 // ...
 
 class RocketType extends AbstractType
@@ -54,16 +60,16 @@ class RocketType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', 'text')
-            ->add('colors', 'choice', [
+            ->add('name', TextType::class)
+            ->add('colors', ChoiceType::class, [
                 'multiple' => true,
                 'choices'  => [
-                    'white'  => 'White',
-                    'orange' => 'Orange',
-                    'blonde' => 'Blonde',
-                    'pink'   => 'Pink',
-                    'blue'   => 'Blue',
-                    'brown'  => 'Brown',
+                    'White'  => 'white',
+                    'Orange' => 'orange',
+                    'Blonde' => 'blonde',
+                    'Pink'   => 'pink',
+                    'Blue'   => 'blue',
+                    'Brown'  => 'brown',
                 ]
             ])
         ;
@@ -75,6 +81,8 @@ class RocketType extends AbstractType
 
 ```php
 <?php
+
+namespace AppBundle\Controller;
 
 // ...
 
