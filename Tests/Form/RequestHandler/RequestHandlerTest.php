@@ -2,91 +2,78 @@
 
 namespace Elao\Bundle\JsonHttpFormBundle\Tests\Form\RequestHandler;
 
-use Symfony\Component\Form\FormFactory;
-use Symfony\Component\Form\Forms;
-use Symfony\Component\HttpFoundation\Request;
 use Elao\Bundle\JsonHttpFormBundle\Form\RequestHandler\JsonHttpFoundationRequestHandler;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\{FormType, TextType, ChoiceType};
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\Forms;
+use Symfony\Component\Form\Util\ServerParams;
+use Symfony\Component\HttpFoundation\Request;
 
-class RequestHandlerTest extends \PHPUnit_Framework_TestCase
+class RequestHandlerTest extends TestCase
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected function setUp()
+    private $requestHandler;
+    private $factory;
+
+    protected function setUp(): void
     {
-        $this->serverParams = $this->getMock(
-            'Symfony\Component\Form\Util\ServerParams',
-            ['getNormalizedIniPostMaxSize', 'getContentLength']
-        );
-        $this->requestHandler = new JsonHttpFoundationRequestHandler($this->serverParams);
-        $this->factory        = Forms::createFormFactoryBuilder()->getFormFactory();
+        $serverParams = $this->createMock(ServerParams::class);
+        $this->requestHandler = new JsonHttpFoundationRequestHandler($serverParams);
+        $this->factory = Forms::createFormFactoryBuilder()->getFormFactory();
     }
 
-    /**
-     * Test JSON POST request
-     */
-    public function testJsonPostRequest()
+    public function testJsonPostRequest(): void
     {
-        $form    = $this->getSampleForm();
-        $data    = $this->getSampleData();
-        $request = new Request([], [], [], [], [], [
-            'REQUEST_METHOD'    => 'POST',
+        $form = $this->getSampleForm();
+        $data = $this->getSampleData();
+        $request = new Request(
+            [], [], [], [], [], [
+            'REQUEST_METHOD' => 'POST',
             'HTTP_CONTENT_TYPE' => 'application/json',
-        ], json_encode(['rocket' => $data]));
+        ], json_encode(['rocket' => $data])
+        );
 
         $this->requestHandler->handleRequest($form, $request);
         $this->assertEquals($data, $form->getData());
     }
 
-    /**
-     * Test Classic POST request
-     */
-    public function testClassicPostRequest()
+    public function testClassicPostRequest(): void
     {
-        $form    = $this->getSampleForm();
-        $data    = $this->getSampleData();
+        $form = $this->getSampleForm();
+        $data = $this->getSampleData();
         $request = new Request([], ['rocket' => $data], [], [], [], ['REQUEST_METHOD' => 'POST']);
 
         $this->requestHandler->handleRequest($form, $request);
         $this->assertEquals($data, $form->getData());
     }
 
-    /**
-     * Get sample data
-     *
-     * @return array
-     */
-    private function getSampleData()
+    private function getSampleData(): array
     {
         return [
-            'name'   => "Méliès",
-            'colors' => ['brown', 'pink']
+            'name' => 'Méliès',
+            'colors' => ['brown', 'pink'],
         ];
     }
 
-    /**
-     * Get sample form
-     *
-     * @return Form
-     */
-    private function getSampleForm()
+    private function getSampleForm(): FormInterface
     {
         return $this->factory
             ->createNamed('rocket', FormType::class, [], [])
             ->add('name', TextType::class)
-            ->add('colors', ChoiceType::class, [
-                'multiple' => true,
-                'choices'  => [
-                    'White'  => 'white',
-                    'Orange' => 'orange',
-                    'Blonde' => 'blonde',
-                    'Pink'   => 'pink',
-                    'Blue'   => 'blue',
-                    'Brown'  => 'brown',
+            ->add(
+                'colors',
+                ChoiceType::class,
+                [
+                    'multiple' => true,
+                    'choices' => [
+                        'White' => 'white',
+                        'Orange' => 'orange',
+                        'Blonde' => 'blonde',
+                        'Pink' => 'pink',
+                        'Blue' => 'blue',
+                        'Brown' => 'brown',
+                    ],
                 ]
-            ]);
+            );
     }
 }
