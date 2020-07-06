@@ -17,9 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class JsonHttpFoundationRequestHandler extends HttpFoundationRequestHandler
 {
-    /**
-     * @var ServerParams
-     */
+    /** @var ServerParams */
     private $serverParams;
 
     /**
@@ -29,9 +27,6 @@ class JsonHttpFoundationRequestHandler extends HttpFoundationRequestHandler
      */
     private static $bodyMethods = ['POST', 'PUT', 'PATCH', 'DELETE'];
 
-    /**
-     * {@inheritdoc}
-     */
     public function __construct(ServerParams $serverParams = null)
     {
         parent::__construct($serverParams);
@@ -39,20 +34,22 @@ class JsonHttpFoundationRequestHandler extends HttpFoundationRequestHandler
         $this->serverParams = $serverParams ?: new ServerParams();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function handleRequest(FormInterface $form, $request = null)
+    public function handleRequest(FormInterface $form, $request = null): void
     {
         if (!$request instanceof Request) {
-            throw new UnexpectedTypeException($request, 'Symfony\Component\HttpFoundation\Request');
+            throw new UnexpectedTypeException($request, Request::class);
         }
 
-        if ($request->getContentType() === 'json' && in_array($request->getMethod(), static::$bodyMethods)) {
-            return $this->handleJsonRequest($form, $request);
-        } else {
-            return parent::handleRequest($form, $request);
+        if (
+            'json' === $request->getContentType()
+            && in_array($request->getMethod(), static::$bodyMethods, false)
+        ) {
+            $this->handleJsonRequest($form, $request);
+
+            return;
         }
+
+        parent::handleRequest($form, $request);
     }
 
     /**
@@ -61,23 +58,27 @@ class JsonHttpFoundationRequestHandler extends HttpFoundationRequestHandler
      * @param FormInterface $form
      * @param Request $request
      */
-    protected function handleJsonRequest(FormInterface $form, Request $request)
+    protected function handleJsonRequest(FormInterface $form, Request $request): void
     {
         if ($this->isContentSizeValid($form)) {
-            $name    = $form->getName();
+            $name = $form->getName();
             $content = json_decode($request->getContent(), true);
 
             if (json_last_error() !== JSON_ERROR_NONE) {
                 $form->submit(null, false);
-                $form->addError(new FormError(sprintf(
-                    'The given JSON content could not be parsed: %s',
-                    json_last_error_msg()
-                )));
+                $form->addError(
+                    new FormError(
+                        sprintf(
+                            'The given JSON content could not be parsed: %s',
+                            json_last_error_msg()
+                        )
+                    )
+                );
 
                 return;
             }
 
-            if ('' === $name || $request->getMethod() === 'DELETE') {
+            if ('' === $name || 'DELETE' === $request->getMethod()) {
                 $data = $content;
             } else {
                 // Don't submit if the form's name does not exist in the request
@@ -96,13 +97,14 @@ class JsonHttpFoundationRequestHandler extends HttpFoundationRequestHandler
      * Check content size
      *
      * Code from {@link HttpFoundationRequestHandler} max size verification.
-     * @author Bernhard Schussek <bschussek@gmail.com>
      *
      * @param FormInterface $form
      *
      * @return boolean
+     *
+     * @author Bernhard Schussek <bschussek@gmail.com>
      */
-    protected function isContentSizeValid(FormInterface $form)
+    protected function isContentSizeValid(FormInterface $form): bool
     {
         // Mark the form with an error if the uploaded size was too large
         // This is done here and not in FormValidator because $_POST is
@@ -110,15 +112,16 @@ class JsonHttpFoundationRequestHandler extends HttpFoundationRequestHandler
         $contentLength = $this->serverParams->getContentLength();
         $maxContentLength = $this->serverParams->getPostMaxSize();
 
-        if (!empty($maxContentLength) && $contentLength > $maxContentLength) {
+        if (null !== $maxContentLength && $contentLength > $maxContentLength) {
             // Submit the form, but don't clear the default values
             $form->submit(null, false);
-
-            $form->addError(new FormError(
-                $form->getConfig()->getOption('post_max_size_message'),
-                null,
-                array('{{ max }}' => $this->serverParams->getNormalizedIniPostMaxSize())
-            ));
+            $form->addError(
+                new FormError(
+                    $form->getConfig()->getOption('post_max_size_message'),
+                    null,
+                    ['{{ max }}' => $this->serverParams->getNormalizedIniPostMaxSize()]
+                )
+            );
 
             return false;
         }
