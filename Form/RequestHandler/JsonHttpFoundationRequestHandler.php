@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Elao\Bundle\JsonHttpFormBundle\Form\RequestHandler;
 
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
@@ -17,15 +19,14 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class JsonHttpFoundationRequestHandler extends HttpFoundationRequestHandler
 {
-    /** @var ServerParams */
-    private $serverParams;
-
     /**
      * Methods that have a body
      *
-     * @var array
+     * @var array<string>
      */
-    private static $bodyMethods = ['POST', 'PUT', 'PATCH', 'DELETE'];
+    private static array $bodyMethods = ['POST', 'PUT', 'PATCH', 'DELETE'];
+
+    private ServerParams $serverParams;
 
     public function __construct(ServerParams $serverParams = null)
     {
@@ -42,7 +43,7 @@ class JsonHttpFoundationRequestHandler extends HttpFoundationRequestHandler
 
         if (
             'json' === $request->getContentType()
-            && in_array($request->getMethod(), static::$bodyMethods, false)
+            && \in_array($request->getMethod(), static::$bodyMethods, false)
         ) {
             $this->handleJsonRequest($form, $request);
 
@@ -54,9 +55,6 @@ class JsonHttpFoundationRequestHandler extends HttpFoundationRequestHandler
 
     /**
      * Handle Json Request
-     *
-     * @param FormInterface $form
-     * @param Request $request
      */
     protected function handleJsonRequest(FormInterface $form, Request $request): void
     {
@@ -97,10 +95,6 @@ class JsonHttpFoundationRequestHandler extends HttpFoundationRequestHandler
      * Check content size
      *
      * Code from {@link HttpFoundationRequestHandler} max size verification.
-     *
-     * @param FormInterface $form
-     *
-     * @return boolean
      *
      * @author Bernhard Schussek <bschussek@gmail.com>
      */

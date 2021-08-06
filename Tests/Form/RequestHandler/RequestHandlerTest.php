@@ -1,10 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Elao\Bundle\JsonHttpFormBundle\Tests\Form\RequestHandler;
 
 use Elao\Bundle\JsonHttpFormBundle\Form\RequestHandler\JsonHttpFoundationRequestHandler;
-use Symfony\Component\Form\Extension\Core\Type\{FormType, TextType, ChoiceType};
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\Forms;
 use Symfony\Component\Form\Util\ServerParams;
@@ -12,8 +17,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class RequestHandlerTest extends TestCase
 {
-    private $requestHandler;
-    private $factory;
+    private JsonHttpFoundationRequestHandler $requestHandler;
+    private FormFactoryInterface $factory;
 
     protected function setUp(): void
     {
@@ -26,12 +31,16 @@ class RequestHandlerTest extends TestCase
     {
         $form = $this->getSampleForm();
         $data = $this->getSampleData();
-        $request = new Request(
-            [], [], [], [], [], [
+
+        $content = json_encode(['rocket' => $data]);
+        $server = [
             'REQUEST_METHOD' => 'POST',
             'HTTP_CONTENT_TYPE' => 'application/json',
-        ], json_encode(['rocket' => $data])
-        );
+        ];
+
+        \assert(\is_string($content));
+
+        $request = new Request([], [], [], [], [], $server, $content);
 
         $this->requestHandler->handleRequest($form, $request);
         $this->assertEquals($data, $form->getData());
@@ -47,6 +56,9 @@ class RequestHandlerTest extends TestCase
         $this->assertEquals($data, $form->getData());
     }
 
+    /**
+     * @return array<string|array>
+     */
     private function getSampleData(): array
     {
         return [

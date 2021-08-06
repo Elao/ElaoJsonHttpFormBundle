@@ -1,0 +1,11 @@
+parameters:
+    level: max
+
+    paths:
+        - .
+
+    excludePaths:
+        - vendor
+
+    bootstrapFiles:
+        - vendor/bin/.phpunit/phpunit/vendor/autoload.php

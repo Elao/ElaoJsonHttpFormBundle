@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Elao\Bundle\JsonHttpFormBundle\DependencyInjection\Compiler;
 
 use Elao\Bundle\JsonHttpFormBundle\Form\RequestHandler\JsonHttpFoundationRequestHandler;

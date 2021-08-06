@@ -1,5 +1,4 @@
-Elao JSON HTTP Form Bundle ![](https://img.shields.io/badge/Symfony-3.0-blue.svg)
-==========================
+# Elao JSON HTTP Form Bundle ![](https://img.shields.io/badge/Symfony-5.3-blue.svg)
 
 [![Build Status](https://travis-ci.org/Elao/ElaoJsonHttpFormBundle.svg)](https://travis-ci.org/Elao/ElaoJsonHttpFormBundle)
 
@@ -11,34 +10,15 @@ The `JsonHttpFoundationRequestHandler` handles the request: If the request conte
 
 Otherwise, it lets the default behaviour operate: the `HttpFoundationRequestHandler` will handle the request. So all your non-json form request will be treated just the way they've always been.
 
-Installation:
--------------
+## Installation
 
-Add _ElaoJsonHttpFormBundle_ to your composer.json:
+Require _ElaoJsonHttpFormBundle_:
 
-```bash
-$ php composer.phar require elao/json-http-form-bundle
+```shell
+composer require elao/json-http-form-bundle
 ```
 
-Register the bundle in the kernel:
-
-```php
-<?php
-// app/AppKernel.php
-
-public function registerBundles()
-{
-    $bundles = array(
-        // ...
-        new Elao\Bundle\JsonHttpFormBundle\ElaoJsonHttpFormBundle(),
-    );
-}
-```
-
-That's it. You're good. Get some well deserved rest.
-
-Usage:
----------
+## Usage
 
 Given a `Rocket` entity with two attributes: `name` (a string) and `colors` (an array of strings).
 
@@ -111,9 +91,9 @@ Content-Length: 43
 
 {"name":"Melies","colors":["pink","brown"]}
 ```
-\o/
+It works \o/
 
-License
+## License
 -------
 
 MIT
