@@ -20,13 +20,6 @@ lint.phpstan:
 lint.composer:
 	composer validate --strict
 
-############
-# Security #
-############
-
-security.symfony@integration:
-	symfony check:security
-
 ########
 # Test #
 ########

@@ -9,5 +9,5 @@
 /.php-cs-fixer.cache
 ###< friendsofphp/php-cs-fixer ###
 
-/vendor
+/vendor/
 composer.lock
