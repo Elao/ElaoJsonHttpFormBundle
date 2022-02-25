@@ -35,6 +35,9 @@ class JsonHttpFoundationRequestHandler extends HttpFoundationRequestHandler
         $this->serverParams = $serverParams ?: new ServerParams();
     }
 
+    /**
+     * @param mixed $request Support old versions of RequestHandlerInterface
+     */
     public function handleRequest(FormInterface $form, $request = null): void
     {
         if (!$request instanceof Request) {

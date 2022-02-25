@@ -93,12 +93,12 @@ jobs:
           key: ${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ matrix.php }}-composer-
 
-      - name: 'Fixup Composer'
-        if: matrix.php == 8.0
-        run: |
-          echo "::group::Fixup Composer platform config for third-parties deps not PHP 8 ready yet"
-            composer config platform.php 7.4.99
-          echo "::endgroup::"
+      #- name: 'Fixup Composer'
+      #  if: matrix.php == 8.0
+      #  run: |
+      #    echo "::group::Fixup Composer platform config for third-parties deps not PHP 8 ready yet"
+      #      composer config platform.php 7.4.99
+      #    echo "::endgroup::"
 
       - name: 'Install dependencies'
         run: |
