@@ -19,16 +19,11 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class JsonHttpFoundationRequestHandler extends HttpFoundationRequestHandler
 {
-    /**
-     * Methods that have a body
-     *
-     * @var array<string>
-     */
-    private static array $bodyMethods = ['POST', 'PUT', 'PATCH', 'DELETE'];
+    private const BODY_METHODS = ['POST', 'PUT', 'PATCH', 'DELETE'];
 
     private ServerParams $serverParams;
 
-    public function __construct(ServerParams $serverParams = null)
+    public function __construct(?ServerParams $serverParams = null)
     {
         parent::__construct($serverParams);
 
@@ -43,10 +38,9 @@ class JsonHttpFoundationRequestHandler extends HttpFoundationRequestHandler
         if (!$request instanceof Request) {
             throw new UnexpectedTypeException($request, Request::class);
         }
-
         if (
-            'json' === $request->getContentType()
-            && \in_array($request->getMethod(), static::$bodyMethods, false)
+            'json' === $this->getFormat($request)
+            && \in_array($request->getMethod(), self::BODY_METHODS, false)
         ) {
             $this->handleJsonRequest($form, $request);
 
@@ -54,6 +48,19 @@ class JsonHttpFoundationRequestHandler extends HttpFoundationRequestHandler
         }
 
         parent::handleRequest($form, $request);
+    }
+
+    private function getFormat(Request $request): ?string
+    {
+        if (method_exists($request, 'getContentTypeFormat')) {
+            return $request->getContentTypeFormat();
+        }
+
+        if (method_exists($request, 'getContentType')) {
+            return $request->getContentType();
+        }
+
+        throw new \LogicException('Could not get Request format');
     }
 
     /**
@@ -79,7 +86,7 @@ class JsonHttpFoundationRequestHandler extends HttpFoundationRequestHandler
                 return;
             }
 
-            if ('' === $name || 'DELETE' === $request->getMethod()) {
+            if ('' === $name || 'DELETE' === $request->getMethod() || !\is_array($content)) {
                 $data = $content;
             } else {
                 // Don't submit if the form's name does not exist in the request
@@ -111,10 +118,12 @@ class JsonHttpFoundationRequestHandler extends HttpFoundationRequestHandler
 
         if (null !== $maxContentLength && $contentLength > $maxContentLength) {
             // Submit the form, but don't clear the default values
+            /** @var string $maxSizeMessage */
+            $maxSizeMessage = $form->getConfig()->getOption('post_max_size_message');
             $form->submit(null, false);
             $form->addError(
                 new FormError(
-                    $form->getConfig()->getOption('post_max_size_message'),
+                    $maxSizeMessage,
                     null,
                     ['{{ max }}' => $this->serverParams->getNormalizedIniPostMaxSize()]
                 )

@@ -57,7 +57,7 @@ class RequestHandlerTest extends TestCase
     }
 
     /**
-     * @return array<string|array>
+     * @return array<string,string|array<string>>
      */
     private function getSampleData(): array
     {

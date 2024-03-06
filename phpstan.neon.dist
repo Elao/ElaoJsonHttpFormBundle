@@ -8,4 +8,5 @@ parameters:
         - vendor
 
     bootstrapFiles:
+        - vendor/autoload.php
         - vendor/bin/.phpunit/phpunit/vendor/autoload.php

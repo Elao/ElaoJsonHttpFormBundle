@@ -1,29 +1,38 @@
 <?php
 
-$finder = (new PhpCsFixer\Finder())->in([
-    __DIR__
-]);
+$header = <<<'EOF'
+This file is part of the ElaoJsonForm bundle.
+
+Copyright (C) Elao
+
+@author Elao <contact@elao.com>
+EOF;
+
+$finder = PhpCsFixer\Finder::create()
+    ->in([__DIR__])
+;
 
 return (new PhpCsFixer\Config())
-    ->setFinder($finder)
-    ->setCacheFile('.php-cs-fixer.cache') // forward compatibility with 3.x line
     ->setRiskyAllowed(true)
+    ->setUsingCache(true)
+    ->setFinder($finder)
     ->setRules([
-        '@PSR12' => true,
         '@Symfony' => true,
-        'strict_param' => true,
         'array_syntax' => ['syntax' => 'short'],
         'concat_space' => ['spacing' => 'one'],
-        'declare_strict_types' => true,
+        //'header_comment' => ['header' => $header],
         'native_function_invocation' => ['include' => ['@compiler_optimized']],
-        'no_superfluous_phpdoc_tags' => true,
         'ordered_imports' => true,
+        'php_unit_namespaced' => true,
+        'php_unit_method_casing' => false,
         'phpdoc_annotation_without_dot' => false,
-        'phpdoc_order' => true,
         'phpdoc_summary' => false,
-        'simplified_null_return' => false,
+        'phpdoc_order' => true,
+        'phpdoc_trim_consecutive_blank_line_separation' => true,
+        'psr_autoloading' => true,
         'single_line_throw' => false,
+        'simplified_null_return' => false,
         'void_return' => true,
-        'yoda_style' => false,
+        'yoda_style' => [],
     ])
 ;
